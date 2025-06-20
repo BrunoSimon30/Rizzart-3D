@@ -1,0 +1,176 @@
+import React, { useRef, useEffect } from "react";
+import { Environment, PerspectiveCamera } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import * as THREE from "three";
+import OurModel from "./OurModel";
+
+export default function Experience() {
+  const cameraRef = useRef();
+  const modelRef = useRef();
+  const rotateRef = useRef(false);  
+  const cameraTargetRef = useRef(new THREE.Vector3(0, -0.011, 0.8));
+  const aboutRotation = { x: 0, y: -1.4, z: 0 };
+  const blogRotation = { x: 0, y: -1.4, z: 0 };
+
+  useFrame((state, delta) => {
+    if (cameraRef.current && cameraTargetRef.current) {
+      cameraRef.current.position.lerp(cameraTargetRef.current, 0.05);
+      cameraRef.current.lookAt(0, 0, 0);
+    }
+
+ 
+
+    if (rotateRef.current && modelRef.current) {
+      modelRef.current.rotation.y += 0.5 * delta;
+    }
+  });
+
+  useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      const sections = [
+        {
+          trigger: ".section-one",
+          camera: { x: 0, y: -0.011, z: 0.8 },
+          model: {
+            position: { x: 0, y: -3, z: 0 },
+            rotation: { x: 0, y: 0, z: 0 },
+          },
+        },
+        {
+          trigger: ".sec-two",
+          camera: { x: 0, y: 0, z: 2.5 },
+          model: {
+            position: { x: 0, y: -3, z: 0 },
+            rotation: { x: 0, y: 0.3, z: 0 },
+          },
+        },
+        {
+          trigger: ".sec-three",
+          camera: { x: 0, y: 0, z: 2.5 },
+          model: {
+            position: { x: -2.5, y: -2, z: -2 },
+            rotation: { x: 0.02, y: 0.9, z: 0 },
+          },
+        },
+        {
+          trigger: ".about-sec",
+          camera: { x: 0, y: 0, z: 2.5 },
+          model: {
+            position: { x: 4, y: -3, z: -2 },
+            rotation: { x: 0, y: -1.4, z: 0 },
+          },
+        },
+        {
+          trigger: ".ourblog-sec",
+          camera: { x: 0, y: 0, z: 2.5 },
+          model: {
+            position: { x: -2.5, y: -2, z: -2 },
+            rotation: { x: 0, y: -1.4, z: 0 },
+          },
+        },
+      ];
+
+      sections.forEach((section) => {
+         
+        ScrollTrigger.create({
+          trigger: section.trigger,
+          start: "top center",
+          end: "bottom center",
+          scrub: 1,
+          onUpdate: () => {
+            cameraTargetRef.current.set(
+              section.camera.x,
+              section.camera.y,
+              section.camera.z
+            );
+          },
+        });
+
+         
+        const modelTL = gsap.timeline({
+          scrollTrigger: {
+            trigger: section.trigger,
+            start: "top center",
+            end: "bottom center",
+            scrub: 1,
+          },
+        });
+
+        modelTL.to(modelRef.current.position, {
+          x: section.model.position.x,
+          y: section.model.position.y,
+          z: section.model.position.z,
+          duration: 1,
+          ease: "power2.inOut",
+        });
+
+        
+        if (section.trigger !== ".ourblog-sec") {
+          modelTL.to(
+            modelRef.current.rotation,
+            {
+              x: section.model.rotation.x,
+              y: section.model.rotation.y,
+              z: section.model.rotation.z,
+              duration: 1,
+              ease: "power2.inOut",
+            },
+            0
+          );
+        }
+      });
+
+       
+      ScrollTrigger.create({
+        trigger: ".ourblog-sec",
+        start: "top center",
+        end: "bottom center",
+        onEnter: () => {
+          gsap.to(modelRef.current.rotation, {
+            x: blogRotation.x,
+            y: blogRotation.y,
+            z: blogRotation.z,
+            duration: 1,
+            ease: "power2.inOut",
+          });
+          rotateRef.current = true;
+        },
+        onLeave: () => (rotateRef.current = true),
+        onEnterBack: () => (rotateRef.current = true),
+        onLeaveBack: () => {
+           
+          gsap.to(modelRef.current.rotation, {
+            x: aboutRotation.x,
+            y: aboutRotation.y,
+            z: aboutRotation.z,
+            duration: 1,
+            ease: "power2.inOut",
+          });
+          rotateRef.current = false;
+        },
+      });
+
+    });
+
+    return () => ctx.revert();  
+  }, []);
+
+  return (
+    <>
+      <PerspectiveCamera
+        ref={cameraRef}
+        makeDefault
+        fov={75}
+        near={0.1}
+        far={1000}
+        position={[0, -0.011, 0.8]}
+      />
+      <Environment preset="city" />
+      <OurModel scale={2.5} ref={modelRef} position={[0, -3, 0]} />
+    </>
+  );
+}
