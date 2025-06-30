@@ -363,15 +363,20 @@ img.arrow
   z-index: -2;
   opacity: 0.1;
 }
-/* .hero-sec::after{
-  position: absolute;
-  content: '';
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(255,255,255,0) 50%);
-} */
+ 
 
+@keyframes spin-reverse {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.animate-spin-reverse {
+  animation: spin-reverse 3s linear infinite; /* slower: 3s */
+}
 .rotate {
   position: absolute;
   right: 14%;
@@ -550,7 +555,8 @@ span.word
     background-size: cover;
     background-repeat: repeat-x;
     animation: cityMoving 60s linear 0s infinite;
-    background-image: url('/img/line-bg-back.png');
+    background-image: url('/img/line-bg-back.svg');
+    opacity: 0.1;
 }
 @keyframes cityMoving {
   0% {

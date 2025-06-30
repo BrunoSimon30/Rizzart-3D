@@ -19,58 +19,48 @@ const AudioWithPreloader = () => {
   const countRefEl = useRef(null);
   const loaderRef = useRef(null);
 
-useGSAP(() => {
-  // ⛔ Skip animation if already not loading or refs missing
-  if (!loading || !curvedTextRef.current || !countRefEl.current) return;
+  useGSAP(() => {
+    const tl = gsap.timeline();
 
-  const tl = gsap.timeline();
-
-  tl.fromTo(
-    curvedTextRef.current,
-    { opacity: 0, scale: 0.5 },
-    { opacity: 1, scale: 1, duration: 1, ease: "power2.out" }
-  )
-    .fromTo(
-      countRefEl.current,
-      { opacity: 0, scale: 0.8 },
-      {
-        opacity: 1,
-        scale: 1,
-        duration: 0.6,
-      },
-      "-=0.5"
+    tl.fromTo(
+      curvedTextRef.current,
+      { opacity: 0, scale: 0.5 },
+      { opacity: 1, scale: 1, duration: 1, ease: "power2.out" }
     )
-    .to(countRef.current, {
-      val: 100,
-      duration: 2,
-      ease: "power1.out",
-      onUpdate: () => {
-        setCount(Math.floor(countRef.current.val));
-      },
-    })
-    .to(countRefEl.current, {
-      opacity: 0,
-      duration: 0.6,
-      onComplete: () => {
-        setLoading(false);
-      },
-    });
+      .fromTo(
+        countRefEl.current,
+        { scale: 0.1 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 5,
+        },
+        "-=0.5"
+      )
 
-  return () => {
-    tl.kill();
-    gsap.set([curvedTextRef.current, countRefEl.current], { clearProps: "all" });
-  };
-}, [loading]); // ✅ always same shape
+      .to(
+        [curvedTextRef.current, countRefEl.current].filter(Boolean), // filter nulls
+        {
+          opacity: 0,
+          scale: 0.5,
+          duration: 0.5,
+          ease: "power2.inOut",
+          onComplete: () => {
+            setLoading(false);
+          },
+        }
+      );
 
-useEffect(() => {
-  if (typeof window !== "undefined") {
+    return () => tl.kill();
+  }, []);
+
+  useEffect(() => {
     const hasEntered = sessionStorage.getItem("hasEntered");
     if (hasEntered) {
       setLoading(false);
       setEntered(true);
     }
-  }
-}, []);
+  }, []);
 
   const handleEnter = () => {
     audioRef.current
@@ -85,11 +75,8 @@ useEffect(() => {
       });
   };
 
-useEffect(() => {
-  if (entered) return; // ⛔ prevent unnecessary autoplay attempt
-
-  const timer = setTimeout(() => {
-    if (!isPlaying && !entered) {
+  useEffect(() => {
+    const handleAutoPlay = () => {
       audioRef.current
         .play()
         .then(() => {
@@ -100,69 +87,73 @@ useEffect(() => {
         .catch((err) => {
           console.log("⛔ Autoplay blocked:", err);
         });
+    };
+    if (!isPlaying && !entered) {
+      handleAutoPlay();
     }
-  }, 1000);
+  }, []);
 
-  return () => clearTimeout(timer);
-}, [entered, isPlaying]);
-
-const togglePlay = () => {
-  const audio = audioRef.current;
-  if (isPlaying) {
-    audio.pause();
-    setIsPlaying(false);
-  } else {
-    audio.play()
-      .then(() => setIsPlaying(true))
-      .catch(console.error);
-  }
-};
+  const togglePlay = () => {
+    const audio = audioRef.current;
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play().catch(console.error);
+    }
+    setIsPlaying(!isPlaying);
+  };
 
   return (
     <>
-      <audio ref={audioRef} loop preload="auto" src="/audio/background.mp3" />
+      <audio ref={audioRef} loop src="/audio/background.mp3" preload="auto" />
 
       {loading && (
         <div
           ref={loaderRef}
           className="fixed inset-0 bg-black text-white flex items-center justify-center text-2xl z-[9999]"
         >
-          <div className="roundedText" ref={curvedTextRef}>
-            <ReactCurvedText
-              key="rizznart-loader"
-              width={300}
-              height={300}
-              cx={150}
-              cy={150}
-              rx={130}
-              ry={130}
-              startOffset={0}
-              reversed={true}
-              text="- High-Quality Design That Impress | RizzNArt - High-Quality Design That Impress | RizzNArt - High-Quality Design That Impress - High-Quality Design That Impress"
-              textProps={{ style: { fontSize: 12.7 } }}
-              textPathProps={{ style: { fill: "#B1FF01" } }}
-              tspanProps={{
-                style: { color: "#fff", textTransform: "uppercase" },
-              }}
-              ellipseProps={null}
-              svgProps={null}
-            />
+          <div ref={curvedTextRef} className="roundedText opacity-0">
+            <div>
+              <ReactCurvedText
+                width={300}
+                height={300}
+                cx={150}
+                cy={150}
+                rx={130}
+                ry={130}
+                startOffset={0}
+                reversed={true}
+                text="- High-Quality Design - Loading | RizzNArt - High-Quality Design - Loading | RizzNArt - High-Quality Design - Loading - High-Quality Design - Loading"
+                textProps={{ style: { fontSize: 12.7 } }}
+                textPathProps={{ style: { fill: "#B1FF01" } }}
+                tspanProps={{
+                  style: { color: "#fff", textTransform: "uppercase" },
+                }}
+                ellipseProps={null}
+                svgProps={null}
+              />
+            </div>
           </div>
 
           <div
             ref={countRefEl}
-            className="absolute top-0 left-0 right-0 bottom-0 m-auto w-fit h-fit z-50"
+            className="absolute top-0 left-0 right-0 bottom-0 m-auto w-fit h-fit z-50 opacity-0"
           >
-            <h1 className="tall text-5xl mt-5 text-[#B1FF01]">{count}</h1>
+            <img
+              src={"/img/green.svg"}
+              alt="svg-Logo"
+              className="animate-spin-reverse "
+            />
           </div>
         </div>
       )}
 
       {!loading && !entered && (
-        <div className="fixed inset-0 bg-black flex items-center justify-center flex-col z-[9998] text-white">
+        <div className="  fixed inset-0 bg-black flex items-center justify-center flex-col z-[9998] text-white">
+        
           <div className="dan-warp"></div>
           <div className="prelod">
-            <img src="/img/preload.png" alt="Logo" className="h-32 glitch" />
+            <img src="/img/preload.svg" alt="Logo" className="h-32 glitch " />
           </div>
           <p className="text-xl mb-6 uppercase italic font-semibold">
             Turn Up The Volume, Baby. The Future Won't Wait.
