@@ -20,6 +20,9 @@ const AudioWithPreloader = () => {
   const loaderRef = useRef(null);
 
 useGSAP(() => {
+  // ⛔ Skip animation if already not loading or refs missing
+  if (!loading || !curvedTextRef.current || !countRefEl.current) return;
+
   const tl = gsap.timeline();
 
   tl.fromTo(
@@ -53,16 +56,21 @@ useGSAP(() => {
       },
     });
 
-  return () => tl.kill();
-}, []);
+  return () => {
+    tl.kill();
+    gsap.set([curvedTextRef.current, countRefEl.current], { clearProps: "all" });
+  };
+}, [loading]); // ✅ always same shape
 
-  useEffect(() => {
+useEffect(() => {
+  if (typeof window !== "undefined") {
     const hasEntered = sessionStorage.getItem("hasEntered");
     if (hasEntered) {
       setLoading(false);
       setEntered(true);
     }
-  }, []);
+  }
+}, []);
 
   const handleEnter = () => {
     audioRef.current
@@ -77,8 +85,11 @@ useGSAP(() => {
       });
   };
 
-  useEffect(() => {
-    const handleAutoPlay = () => {
+useEffect(() => {
+  if (entered) return; // ⛔ prevent unnecessary autoplay attempt
+
+  const timer = setTimeout(() => {
+    if (!isPlaying && !entered) {
       audioRef.current
         .play()
         .then(() => {
@@ -89,25 +100,27 @@ useGSAP(() => {
         .catch((err) => {
           console.log("⛔ Autoplay blocked:", err);
         });
-    };
-    if (!isPlaying && !entered) {
-      handleAutoPlay();
     }
-  }, []);
+  }, 1000);
 
-  const togglePlay = () => {
-    const audio = audioRef.current;
-    if (isPlaying) {
-      audio.pause();
-    } else {
-      audio.play().catch(console.error);
-    }
-    setIsPlaying(!isPlaying);
-  };
+  return () => clearTimeout(timer);
+}, [entered, isPlaying]);
+
+const togglePlay = () => {
+  const audio = audioRef.current;
+  if (isPlaying) {
+    audio.pause();
+    setIsPlaying(false);
+  } else {
+    audio.play()
+      .then(() => setIsPlaying(true))
+      .catch(console.error);
+  }
+};
 
   return (
     <>
-      <audio ref={audioRef} loop src="/audio/background.mp3" />
+      <audio ref={audioRef} loop preload="auto" src="/audio/background.mp3" />
 
       {loading && (
         <div
@@ -116,6 +129,7 @@ useGSAP(() => {
         >
           <div className="roundedText" ref={curvedTextRef}>
             <ReactCurvedText
+              key="rizznart-loader"
               width={300}
               height={300}
               cx={150}
