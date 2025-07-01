@@ -266,7 +266,7 @@ const AudioWithPreloader = () => {
 
           <div
             onClick={togglePlay}
-            className={`fixed top-4 right-4 z-50 bg-[#B1FF01] backdrop-blur-lg w-10 h-10 flex items-center justify-center ${
+            className={`fixed top-6 right-8 z-50 bg-[#B1FF01] backdrop-blur-lg w-10 h-10 flex items-center justify-center ${
               entered && !isPlaying ? "blinking" : ""
             }`}
           >

@@ -109,7 +109,7 @@ export default function OurWork() {
 
 
   return (
-    <section ref={teamRef} id="work" className="work-sec py-24 md:py-32 ">
+    <section ref={teamRef} id="work" className="work-sec py-24 md:py-32 bg-black">
       <div className=" md:space-y-24 space-y-16">
         <div className="flex justify-between px-8 md:px-16">
           <div className="b-h flex items-center gap-4">

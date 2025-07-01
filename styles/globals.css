@@ -607,3 +607,11 @@ span.word
   z-index: -3;
 }
  
+
+.inner-ban-wrap{
+  animation: cityMoving 60s linear 0s infinite;
+   
+    background-image: url('/img/inner-bg.jpg');
+     
+     
+}

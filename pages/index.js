@@ -3,6 +3,7 @@ import Blogs from "@/components/Blogs";
 import Contact from "@/components/contact/Contact";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import ImageReveal from "@/components/ImageReveal";
 import MainBanner from "@/components/MainBanner";
 import Marquee from "@/components/marquee";
  
@@ -47,6 +48,7 @@ export default function Home() {
       <Team />
       <Teamsec />
       <OurWork />
+      <ImageReveal/>
       <Contact />
       <Footer />
     </>

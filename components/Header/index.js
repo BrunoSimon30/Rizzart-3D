@@ -111,7 +111,7 @@ export default function Header() {
               {menuItems.map(({ id, label }) => (
                 <li key={id}>
                   <Link
-                    href={`/#${id}`}
+                    href={`/${id}`}
                     className={`flex items-center gap-2 text-[22px] font-semibold uppercase transition-all duration-300 ${
                       activeSection === id ? "text-white" : "text-gray-400"
                     }`}
