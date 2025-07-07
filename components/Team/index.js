@@ -126,7 +126,7 @@ export default function Team() {
                         <div className="col-span-2">
                           <Image
                             className="rounded-2xl"
-                            src={"/img/silmaya.jpg"}
+                            src={"/img/silmaya.webp"}
                             width={406}
                             height={656}
                             alt="Slide Image"
@@ -250,7 +250,7 @@ export default function Team() {
                         <div className="col-span-2">
                           <Image
                             className="rounded-2xl"
-                            src={"/img/sil.jpg"}
+                            src={"/img/sil.webp"}
                             width={406}
                             height={656}
                             alt="Slide Image"
@@ -371,7 +371,7 @@ export default function Team() {
                         <div className="col-span-2">
                           <Image
                             className="rounded-2xl"
-                            src={"/img/silzee.jpg"}
+                            src={"/img/silzee.webp"}
                             width={406}
                             height={656}
                             alt="Slide Image"

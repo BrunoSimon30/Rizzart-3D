@@ -73,7 +73,7 @@ export default function Teamsec() {
         <div className="teamn-bx space-y-4">
             <Image
               className="team-img"
-              src="/img/t1.png"
+              src="/img/t1.webp"
               alt="team"
               width={567}
               height={535} />
@@ -85,7 +85,7 @@ export default function Teamsec() {
         <div className="teamn-bx space-y-4">
             <Image
               className="team-img"
-              src="/img/t2.png"
+              src="/img/t2.webp"
               alt="team"
               width={567}
               height={535} />
@@ -97,7 +97,7 @@ export default function Teamsec() {
         <div className="teamn-bx space-y-4">
             <Image
               className="team-img"
-              src="/img/t3.png"
+              src="/img/t3.webp"
               alt="team"
               width={567}
               height={535} />

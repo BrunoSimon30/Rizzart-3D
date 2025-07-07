@@ -6,7 +6,7 @@ import Header from "@/components/Header";
 import ImageReveal from "@/components/ImageReveal";
 import MainBanner from "@/components/MainBanner";
 import Marquee from "@/components/marquee";
- 
+
 import Experience from "@/components/Model/Experience";
 import Pricing from "@/components/Pricing";
 import Secthree from "@/components/secthree";
@@ -16,7 +16,7 @@ import Teamsec from "@/components/Teamsec";
 import OurWork from "@/components/work";
 import { Canvas } from "@react-three/fiber";
 import Head from "next/head";
- 
+import { Suspense } from "react";
 
 export default function Home() {
   return (
@@ -35,7 +35,9 @@ export default function Home() {
       <Header />
       <section className="can-sec fixed top-0 h-screen w-full">
         <Canvas>
-          <Experience />
+          <Suspense fallback={null}>
+            <Experience />
+          </Suspense>
         </Canvas>
       </section>
 
@@ -48,7 +50,6 @@ export default function Home() {
       <Team />
       <Teamsec />
       <OurWork />
-      <ImageReveal/>
       <Contact />
       <Footer />
     </>

@@ -66,18 +66,18 @@ export default function OurWork() {
       useGSAP(() => {
 
 
- gsap.to(teamRef.current, {
-      scrollTrigger: {
-        trigger: teamRef.current,
-        scroller: 'body',
-        start: "top top",
-        end: "bottom top",
-        pin: true,
-        pinSpacing: false,
-        scrub: 1,
-        // markers: true,
-      }
-    });
+//  gsap.to(teamRef.current, {
+//       scrollTrigger: {
+//         trigger: teamRef.current,
+//         scroller: 'body',
+//         start: "top top",
+//         end: "bottom top",
+//         pin: true,
+//         pinSpacing: false,
+//         scrub: 1,
+//         // markers: true,
+//       }
+//     });
 
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -157,7 +157,7 @@ export default function OurWork() {
             {[...Array(7)].map((_, i) => (
               <div key={i} className="mimg w-[250px] md:w-auto">
                 <Image
-                  src={`/img/m${i + 1}.jpg`}
+                  src={`/img/m${i + 1}.webp`}
                   width={420}
                   height={420}
                   alt={`Image ${i + 1}`}

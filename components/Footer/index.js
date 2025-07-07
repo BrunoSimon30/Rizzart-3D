@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useRef, useState } from "react";
-import { FaYoutube, FaLinkedin, FaInstagramSquare } from "react-icons/fa";
+import {  FaLinkedinIn , FaInstagram,FaFacebookF,FaTiktok    } from "react-icons/fa";
+import { FiYoutube } from "react-icons/fi";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
@@ -141,7 +142,7 @@ export default function Footer() {
           <div className="up border-2 border-black md:grid md:grid-cols-2">
             <div>
               <Image
-                src={"/img/ft-sc.jpg"}
+                src={"/img/ft-sc.webp"}
                 alt="footer"
                 width={762}
                 height={395}
@@ -161,7 +162,7 @@ export default function Footer() {
             </div>
           </div>
           <div className="up ft-btm ">
-            <div className="md:grid md:grid-cols-4 gap-12 items-center space-y-6 md:space-y-0">
+            <div className="md:grid md:grid-cols-4 gap-12  space-y-6 md:space-y-0">
               <div className="ft-link w-[150px] bg-black 2xl:bg-transparent p-2">
                 <Link href="/">
                   <Image
@@ -208,7 +209,7 @@ export default function Footer() {
                 <ul className="ft-lin SMN_effect-15">
                   <li>
                     <Link href="mailto:letstalk@rizznart.com">
-                    Letstalk@rizznart.com
+                      Letstalk@rizznart.com
                     </Link>
                   </li>
                   <li>
@@ -216,7 +217,7 @@ export default function Footer() {
                   </li>
                   <li>
                     <p className="text-black text-[18px] font-[600] pl-4">
-                    9980 South 300 West,Sandy,UT,84070
+                      9980 South 300 West,Sandy,UT,84070
                     </p>
                   </li>
                 </ul>
@@ -225,24 +226,31 @@ export default function Footer() {
                 <h3 className="text-[25px] md:text-[2.229vw] text-black font-[600] uppercase tall">
                   Social links
                 </h3>
-                <ul className="ft-lin  ">
-                  <li className="flex items-center gap-2">
-                    <span>
-                      <FaInstagramSquare />
-                    </span>
-                    <Link href="/"> Instagram</Link>
+                <ul className=" flex gap-2   ">
+                  <li >
+                    <Link href="/" className="border  border-black p-2 rounded-full flex">
+                      <FaInstagram  />
+                    </Link>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span>
-                      <FaYoutube />
-                    </span>
-                    <Link href="/">Youtube</Link>
+                  <li >
+                    <Link href="/" className="border  border-black p-2 rounded-full flex">
+                      <FiYoutube  />
+                    </Link>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span>
-                      <FaLinkedin />
-                    </span>
-                    <Link href="/">Linkedin</Link>
+                  <li >
+                    <Link href="/" className="border  border-black p-2 rounded-full flex">
+                      <FaLinkedinIn  />
+                    </Link>
+                  </li>
+                  <li >
+                    <Link href="/" className="border  border-black p-2 rounded-full flex">
+                      <FaFacebookF   />
+                    </Link>
+                  </li>
+                  <li >
+                    <Link href="/" className="border  border-black p-2 rounded-full flex">
+                      <FaTiktok    />
+                    </Link>
                   </li>
                 </ul>
               </div>

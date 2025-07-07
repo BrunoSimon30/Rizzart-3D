@@ -1,56 +1,35 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/router";
 
 export default function Header() {
-  const [activeSection, setActiveSection] = useState("");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = ["home", "about", "blogs", "team", "work", "contact"];
-      let currentSection = "";
-
-      sections.forEach((section) => {
-        const el = document.getElementById(section);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            currentSection = section;
-          }
-        }
-      });
-
-      setActiveSection(currentSection);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const router = useRouter();
 
   const menuItems = [
-    { id: "home", label: "Home" },
-    { id: "about", label: "About" },
-    { id: "blogs", label: "Blogs" },
-    { id: "team", label: "Team" },
-    { id: "work", label: "Work" },
-    { id: "contact", label: "Contact" },
+    { href: "/", label: "Home" },
+    { href: "/about", label: "About" },
+    { href: "/blogs", label: "Blogs" },
+    { href: "/team", label: "Team" },
+    { href: "/work", label: "Work" },
+    { href: "/contact", label: "Contact" },
   ];
 
   return (
-    <header className="fixed top-0 left-0 w-full   z-50">
+    <header className="fixed top-0 left-0 w-full z-50">
       <div className="top-head h-3 bg-black"></div>
       <div className="container mx-auto max-w-screen-lg">
         <div className="flex justify-between items-center px-4 py-3 relative mt-0 lg:-mt-3">
           {/* Logo */}
           <div className="bg-black lg:hidden p-2">
             <div className="w-14">
-            <Image
-              src="/img/ft-logo.png"
-              width={327}
-              height={187}
-              alt="arrow"
-            />
+              <Image
+                src="/img/ft-logo.png"
+                width={327}
+                height={187}
+                alt="logo"
+              />
             </div>
           </div>
 
@@ -78,7 +57,7 @@ export default function Header() {
             ) : (
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                 className="w-7 h-7"
+                className="w-7 h-7"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -93,34 +72,26 @@ export default function Header() {
             )}
           </button>
 
-          {/* Backdrop (For Mobile) */}
-          {/* {isMenuOpen && (
-            <div
-              className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-              onClick={() => setIsMenuOpen(false)}
-            ></div>
-          )} */}
-
           {/* Navigation */}
           <nav
-            className={`fixed top-0 right-0 h-full w-64  text-white shadow-lg transform bg-black lg:bg-transparent ${
+            className={`fixed top-0 right-0 h-full w-64 text-white shadow-lg transform bg-black lg:bg-transparent ${
               isMenuOpen ? "translate-x-0" : "translate-x-full"
             } transition-transform lg:static lg:translate-x-0 lg:w-full lg:flex`}
           >
             <ul className="menu flex flex-col lg:flex-row gap-6 p-6 lg:p-0 lg:gap-8 lg:justify-evenly lg:w-full mt-24 lg:mt-0">
-              {menuItems.map(({ id, label }) => (
-                <li key={id}>
+              {menuItems.map(({ href, label }) => (
+                <li key={href}>
                   <Link
-                    href={`/${id}`}
+                    href={href}
                     className={`flex items-center gap-2 text-[22px] font-semibold uppercase transition-all duration-300 ${
-                      activeSection === id ? "text-white" : "text-gray-400"
+                      router.pathname === href ? "text-white" : "text-gray-400"
                     }`}
-                    onClick={() => setIsMenuOpen(false)} // Close menu on click (Mobile)
+                    onClick={() => setIsMenuOpen(false)} // Close mobile menu
                   >
                     {/* Active Indicator */}
                     <span
                       className={`transition-all duration-300 w-5 ${
-                        activeSection === id ? "opacity-100" : "opacity-0"
+                        router.pathname === href ? "opacity-100" : "opacity-0"
                       }`}
                     >
                       <svg
